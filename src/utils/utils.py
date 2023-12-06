@@ -1,4 +1,4 @@
-from utils.imports import *
+from .imports import *
 
 # Transform to C x H x W = 3 x 224 x 224 by resizing and duplicating the grayscale channel
 def preprocess_images(data):

@@ -1,4 +1,4 @@
-from imports import *
+from .imports import *
 
 def download_data(fnames, urls):
     for fname, url in zip(fnames, urls):

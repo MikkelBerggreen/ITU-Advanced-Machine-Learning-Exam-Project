@@ -1,4 +1,4 @@
-from imports import *
+from .imports import *
 
 class PretrainedModel(nn.Module):
     def __init__(self, model_str):

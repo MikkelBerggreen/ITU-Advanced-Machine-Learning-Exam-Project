@@ -7,15 +7,16 @@ class PretrainedModel(nn.Module):
         if model_str == "AlexNet":
             base_model = models.alexnet(weights=AlexNet_Weights.DEFAULT)
             self.features = base_model.features
-            self.avgpool = base_model.avgpool
+            self.avgpool = nn.AdaptiveAvgPool2d((6, 6))
             self.classifier = nn.Sequential(
-                nn.Dropout(),
+                nn.Dropout(0.75),
                 nn.Linear(256 * 6 * 6, 4096),
+                nn.Dropout(0.75),
                 nn.ReLU(inplace=True),
-                nn.Dropout(),
                 nn.Linear(4096, 4096),
+                nn.Dropout(0.75),
                 nn.ReLU(inplace=True),
-                nn.Linear(4096, 8428),
+                nn.Linear(4096, 10),
             )
 
         elif model_str == "ResNet18":

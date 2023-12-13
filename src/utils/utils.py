@@ -41,3 +41,23 @@ def get_current_time():
     timeString = str(current_time)
 
     return timeString
+
+
+
+#calculate PCA 
+
+def calculate_pca(training_outputs):
+    
+    #create PCA object
+    pca = PCA(n_components=10)
+    
+    #fit PCA to training outputs
+    pca.fit(training_outputs)
+    
+    
+    #transform training and test outputs
+    training_outputs_pca = pca.transform(training_outputs)
+
+
+    
+    return training_outputs_pca, pca

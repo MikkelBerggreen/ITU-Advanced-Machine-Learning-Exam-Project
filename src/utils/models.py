@@ -1,23 +1,29 @@
 from .imports import *
+import hashlib
 
 class PretrainedModel(nn.Module):
+           
+
     def __init__(self, model_str):
         super(PretrainedModel, self).__init__()
+        self.features_cache = {}
 
         if model_str == "AlexNet":
             base_model = models.alexnet(weights=AlexNet_Weights.DEFAULT)
             self.features = base_model.features
+
             self.avgpool = nn.AdaptiveAvgPool2d((6, 6))
             self.classifier = nn.Sequential(
-                nn.Dropout(0.75),
+                nn.Dropout(0.85),
                 nn.Linear(256 * 6 * 6, 4096),
-                nn.Dropout(0.75),
+                nn.Dropout(0.85),
                 nn.ReLU(inplace=True),
                 nn.Linear(4096, 4096),
-                nn.Dropout(0.75),
+                nn.Dropout(0.85),
                 nn.ReLU(inplace=True),
                 nn.Linear(4096, 10),
             )
+
 
         elif model_str == "ResNet18":
             base_model = models.resnet18(weights=ResNet18_Weights.DEFAULT)
@@ -33,10 +39,12 @@ class PretrainedModel(nn.Module):
 
         else:
             raise ValueError("Invalid model name")
+    
+    def forward_features_only(self, x):
+        return self.features(x)
 
     def forward(self, x):
         
-        x = self.features(x)
         x = self.avgpool(x)
         x = torch.flatten(x, 1)
         x = self.classifier(x)

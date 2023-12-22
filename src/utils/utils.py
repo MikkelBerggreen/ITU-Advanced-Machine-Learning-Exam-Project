@@ -61,3 +61,26 @@ def calculate_pca(training_outputs):
 
     
     return training_outputs_pca, pca
+
+
+
+def apply_pca_to_rois(training_outputs, roi_assignments, n_rois=7, n_components=10):
+    # Initialize the output array
+    pca_outputs = np.zeros((training_outputs.shape[0], n_rois * n_components))
+
+    # Loop over each ROI
+    for roi_index in range(n_rois):
+        # Find the voxels belonging to the current ROI
+        roi_voxels = np.where(roi_assignments == roi_index+1)[0]
+
+        # Apply PCA on the current ROI across all samples
+        pca = PCA(n_components=n_components)
+        roi_data = training_outputs[:, roi_voxels]
+        pca_transformed = pca.fit_transform(roi_data)
+
+        # Place the PCA components into the output array
+        start_col = roi_index * n_components
+        end_col = start_col + n_components
+        pca_outputs[:, start_col:end_col] = pca_transformed
+
+    return pca_outputs

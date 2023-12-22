@@ -14,14 +14,14 @@ class PretrainedModel(nn.Module):
 
             self.avgpool = nn.AdaptiveAvgPool2d((6, 6))
             self.classifier = nn.Sequential(
-                nn.Dropout(0.85),
+                nn.Dropout(0.82),
                 nn.Linear(256 * 6 * 6, 4096),
-                nn.Dropout(0.85),
+                nn.Dropout(0.82),
                 nn.ReLU(inplace=True),
                 nn.Linear(4096, 4096),
-                nn.Dropout(0.85),
+                nn.Dropout(0.82),
                 nn.ReLU(inplace=True),
-                nn.Linear(4096, 10),
+                nn.Linear(4096, 70),
             )
 
 

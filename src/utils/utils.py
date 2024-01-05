@@ -44,12 +44,11 @@ def get_current_time():
 
 
 
-#calculate PCA 
-
-def calculate_pca(training_outputs):
+# Calculate PCA 
+def calculate_pca(training_outputs, n_components=None):
     
     #create PCA object
-    pca = PCA(n_components=10)
+    pca = PCA(n_components=n_components)
     
     #fit PCA to training outputs
     pca.fit(training_outputs)
@@ -57,12 +56,32 @@ def calculate_pca(training_outputs):
     
     #transform training and test outputs
     training_outputs_pca = pca.transform(training_outputs)
-
-
     
     return training_outputs_pca, pca
 
+# Calculate the PCA with a given variance threshold. Components are retained until the threshold is reached.
+def calculate_pca_with_threshold(training_outputs, variance_threshold=0.95):
+    
+    # Create PCA object without specifying the number of components
+    pca = PCA()
 
+    # Fit PCA to training outputs
+    pca.fit(training_outputs)
+    
+    # Calculate the cumulative sum of explained variance ratios
+    cumulative_variance = pca.explained_variance_ratio_.cumsum()
+
+    # Find the number of components for the desired variance threshold
+    n_components = (cumulative_variance < variance_threshold).sum() + 1
+    
+    # Refit PCA with the correct number of components
+    pca = PCA(n_components=n_components)
+    pca.fit(training_outputs)
+
+    # Transform training outputs
+    training_outputs_pca = pca.transform(training_outputs)
+    
+    return training_outputs_pca, pca, n_components
 
 def apply_pca_to_rois(training_outputs, roi_assignments, n_rois=7, n_components=10):
     # Initialize the output array

@@ -1,3 +1,14 @@
+## Repository description
+
+In this repository you will find our source code and all trained models. 
+
+The source code can be found in the `src` folder, which contains four notebook and a `utils` folder. The latter contains the actual implementation of our model and various configurations and helper methods, which we import in our notebooks. The notebooks are:
+
+1. `visualization.ipynb`: Contains the logic for preliminary visualizations of the dataset.
+2. `main.ipynb`: Contains the logic for preprocessing the training data and training a model. To run different models change the configuration in `src/utils/config.py`.
+3. `results.ipynb`: Contains the logic for preprocessing the test data and testing the model.
+4. `Gabor.ipynb`: Contains the logic for computing results with the Gabor Wavelet Pyramid.
+
 ## Modelling how the brain represents visual information
 
 ![](mp_brainvision.png)

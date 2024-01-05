@@ -9,7 +9,7 @@ The source code can be found in the `src` folder, which contains four notebook a
 3. `results.ipynb`: Contains the logic for preprocessing the test data and testing the model.
 4. `Gabor.ipynb`: Contains the logic for computing results with the Gabor Wavelet Pyramid.
 
-## Modelling how the brain represents visual information
+## Problem description - Modelling how the brain represents visual information
 
 ![](mp_brainvision.png)
 

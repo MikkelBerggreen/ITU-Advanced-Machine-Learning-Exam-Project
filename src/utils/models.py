@@ -42,15 +42,23 @@ class PretrainedModel(nn.Module):
 
         elif model_str == "ResNet18":
             base_model = models.resnet18(weights=ResNet18_Weights.DEFAULT)
+
+            # Adjust channels accordingly - 18 for Gabor, 3 otherwise
+            base_model.conv1 = nn.Conv2d(18, 64, kernel_size=7, stride=2, padding=3, bias=False)
+
             self.features = nn.Sequential(*list(base_model.children())[:-2])
             self.avgpool = base_model.avgpool
-            self.classifier = nn.Linear(base_model.fc.in_features, 8428)
+            self.classifier = nn.Linear(base_model.fc.in_features, output_size)
 
         elif model_str == "ResNet50":
             base_model = models.resnet50(weights=ResNet50_Weights.DEFAULT)
+
+            # Adjust channels accordingly - 18 for Gabor, 3 otherwise
+            base_model.conv1 = nn.Conv2d(18, 64, kernel_size=7, stride=2, padding=3, bias=False)
+
             self.features = nn.Sequential(*list(base_model.children())[:-2])
             self.avgpool = base_model.avgpool
-            self.classifier = nn.Linear(base_model.fc.in_features, 8428)
+            self.classifier = nn.Linear(base_model.fc.in_features, output_size)
 
         else:
             raise ValueError("Invalid model name")

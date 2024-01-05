@@ -103,34 +103,3 @@ def apply_pca_to_rois(training_outputs, roi_assignments, n_rois=7, n_components=
         pca_outputs[:, start_col:end_col] = pca_transformed
 
     return pca_outputs
-
-
-
-def gabor_kernel(frequency, theta, sigma_x, sigma_y, offset=0, ks=21):
-    """ Create a Gabor wavelet kernel. """
-    xv, yv = torch.meshgrid([torch.linspace(-ks//2, ks//2, ks), torch.linspace(-ks//2, ks//2, ks)])
-    xv = xv.float()
-    yv = yv.float()
-
-    theta = torch.tensor(theta)  # Convert theta to a PyTorch tensor
-    x_theta = xv * torch.cos(theta) + yv * torch.sin(theta)
-    y_theta = -xv * torch.sin(theta) + yv * torch.cos(theta)
-
-    gb = torch.exp(-.5 * (x_theta**2 / sigma_x**2 + y_theta**2 / sigma_y**2)) * torch.cos(2 * np.pi * frequency * x_theta + offset)
-    return gb
-
-class GaborPyramid(nn.Module):
-    def __init__(self, num_scales, num_orientations):
-        super(GaborPyramid, self).__init__()
-        self.filters = nn.ModuleList()
-        for _ in range(num_scales):
-            for theta in np.linspace(0, np.pi, num_orientations, endpoint=False):
-                gabor_filter = nn.Conv2d(1, 1, kernel_size=21, bias=False)
-                gabor_filter.weight.data = gabor_kernel(frequency=0.4, theta=theta, sigma_x=4.0, sigma_y=4.0).unsqueeze(0).unsqueeze(0)
-                self.filters.append(gabor_filter)
-
-    def forward(self, x):
-        responses = []
-        for gabor_filter in self.filters:
-            responses.append(gabor_filter(x))
-        return responses

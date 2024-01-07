@@ -45,7 +45,7 @@ def get_current_time():
 
 
 # Calculate PCA 
-def calculate_pca(training_outputs, n_components=None):
+def calculate_pca(training_outputs, n_components=10):
     
     #create PCA object
     pca = PCA(n_components=n_components)
